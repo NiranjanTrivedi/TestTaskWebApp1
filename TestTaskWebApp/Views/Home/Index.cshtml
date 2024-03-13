@@ -1,0 +1,113 @@
+﻿@model List<User>
+@{
+    // Layout = "~/Views/Shared/_Layout1.cshtml";
+    //string searchTerm = ViewData["searchTerm"] as string ?? "";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Data</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>User Data</h2>
+    <div class="row p-2 mt-3">
+
+        <div class="col-6">
+            <h2>User List</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a class="btn btn-primary" asp-controller="Home" asp-action="Create"><i class="bi bi-plus-circle"></i>Create New User</a>
+           
+        </div>
+    <table>
+        <tr>
+            <th>User Name</th>
+            <th>Date of Birth</th>
+            <th>Address</th>
+            <th>Email ID</th>
+            <th>Action</th>
+        </tr>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Dob.ToShortDateString()</td>
+                <td>@user.Address</td>
+                <td>@user.EmailId</td>
+                    <td>
+                        <a href="/Home/Update?Id=@user.UserId" class="btn btn-success">Edit</a>
+                        <a href="/Home/Delete?Id=@user.UserId" class="btn btn-danger" onclick="return window.confirm('Are You sure?')">Delete</a>
+                    </td>
+            </tr>
+        }
+       
+
+    </table>
+    <div class="row">
+            <div class="col-md-3 mt-4">
+                <button onclick="exportToExcel()" class="btn-secondary form-control">Export to Excel</button>
+        </div>
+
+            <div class="col-md-3 mt-4">
+            <button onclick="exportToPdf()" class="btn-secondary form-control">Export to PDF</button>
+   </div>
+        </div>
+</body>
+</html>
+
+<!-- SheetJS (js-xlsx) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+    function exportToExcel() {
+        var users = @Html.Raw(Json.Serialize(Model)); // Serialize your Model to JavaScript object
+
+        var wb = XLSX.utils.book_new();
+        var ws = XLSX.utils.json_to_sheet(users);
+        XLSX.utils.book_append_sheet(wb, ws, "Users");
+
+        // Save Excel file
+        XLSX.writeFile(wb, "Users.xlsx");
+    }
+
+    function exportToPdf() {
+        var users = @Html.Raw(Json.Serialize(Model)); // Serialize your Model to JavaScript object
+
+        var doc = new jsPDF();
+
+        // Convert user data to array of arrays
+        var data = users.map(user => [user.UserName, user.Dob, user.Address, user.EmailId]);
+
+        // Set up table columns and headers
+        var columns = ["User Name", "Date of Birth", "Address", "Email ID"];
+
+        // Add table using jsPDF-AutoTable plugin
+        doc.autoTable({
+            head: [columns],
+            body: data
+        });
+
+        // Save PDF file
+        doc.save("Users.pdf");
+    }
+</script>
+
+

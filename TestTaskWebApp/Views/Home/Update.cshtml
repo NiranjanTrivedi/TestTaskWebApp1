@@ -1,0 +1,120 @@
+﻿@model CreateUser;
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+<style>
+    .custom-background {
+        background: #f5f5f5; /* Light background color */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+        padding: 20px; /* Adjust padding for content */
+        border-radius: 10px; /* Optional: Add border-radius for rounded corners */
+    }
+</style>
+
+<form method="post" asp-action="Update" enctype="multipart/form-data">
+    <div class=".custom-background">
+        <div class="border p-3 mt-4">
+            <div class="row pb-2">
+                <h3 class="text-primary">Update User Detail</h3>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Left Column -->
+
+                    <input type="hidden" asp-for="UserId" />
+                    <div class="mb-3">
+                        <label>UserName</label>
+                        <input type="text" asp-for="UserName" placeholder="Enter UserName " class="form-control" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label>Password</label>
+                        <input type="text" asp-for="Password" placeholder="Enter Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label>Address</label>
+                        <input type="text" asp-for="Address" placeholder="Enter Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="text" asp-for="EmailId" placeholder="Enter EmailId" class="form-control" />
+                        <span asp-validation-for="EmailId" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label>Date of birth</label>
+                        <div class="input-group date" id="datetimepicker">
+                            <input type="text" asp-for="Dob" placeholder="Select Date and Time" class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        <span asp-validation-for="Dob" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>ProfileImage</label>
+                        <input type="file" id="ProfilePictureFile" class="form-control" accept="image/*" onchange="convertToBase64()" />
+
+                        <input type="hidden" id="ProfilePicture" name="ProfilePicture" />
+                        <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                    </div>
+                    <!-- Add more fields for the left column as needed -->
+                </div>
+                <div class="col-md-6">
+                    <img src="/img/userimg.jpg" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button class="btn btn-primary form-control" type="submit">Save</button>
+                </div>
+                <div class="col-6">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary border form-control">Back to the list</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+    <script>
+        $(document).ready(function () {
+            CKEDITOR.replace('editor');
+            CKEDITOR.replace('editor1');
+        });
+    </script>
+
+    <script>
+        function convertToBase64() {
+            // Get the selected file input element
+            var fileInput = document.getElementById('ProfilePictureFile');
+
+            // Check if any file is selected
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+
+                // Read the selected file as a data URL
+                reader.readAsDataURL(fileInput.files[0]);
+
+                // Once the file is loaded, convert it to base64
+                reader.onload = function (e) {
+                    // Get the base64 string
+                    var base64Image = e.target.result;
+
+                    // Set the value of the hidden input field to the base64 string
+                    document.getElementById('ProfilePicture').value = base64Image;
+                };
+            }
+        }
+    </script>
+}
+
+
+
