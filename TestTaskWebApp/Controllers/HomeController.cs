@@ -29,21 +29,13 @@ namespace TestTaskWebApp.Controllers
         
         public async Task<IActionResult> Create()
         {
-            //var users = await _userApi.GetAllUsers();
-            //if (users != null)
-            //{
-            //    return View(users);
-            //}
-            //return NotFound();
+        
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Create(CreateUser user)
         {
            
-           // string base64Image = await _userApi.ConvertImageToBase64(user.ProfilePictureFile);
-            //return await _userApi.CreateUser(user);
-
             if (ModelState.IsValid)
             {
                 await _userApi.CreateUser(user);

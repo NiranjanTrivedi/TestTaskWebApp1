@@ -93,13 +93,13 @@
 
         var doc = new jsPDF();
 
-        // Convert user data to array of arrays
+        
         var data = users.map(user => [user.UserName, user.Dob, user.Address, user.EmailId]);
 
-        // Set up table columns and headers
+        
         var columns = ["User Name", "Date of Birth", "Address", "Email ID"];
 
-        // Add table using jsPDF-AutoTable plugin
+        
         doc.autoTable({
             head: [columns],
             body: data
